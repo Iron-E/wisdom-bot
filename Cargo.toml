@@ -2,8 +2,24 @@
 name = "wisdom-bot"
 version = "0.1.0"
 authors = ["Iron-E <code.iron.e@gmail.com>"]
-edition = "2018"
+description = "Discord bot to return "
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+categories = ["API Bindings", "Network programming", "Web programming"]
+edition = "2018"
+keywords = ["discord", "random", "video", "youtube"]
+license = "GPL3"
+readme = "./README.md"
+repository = "https://www.github.com/Iron-E/wisdom-bot"
 
 [dependencies]
+# Async
+tokio = {features=["macros", "rt-multi-thread"], version="1"}
+
+# HTTP
+reqwest = "0.11"
+
+# RNG
+rand = "0.8"
+
+# Serialization
+serde_json = "1"
