@@ -8,6 +8,12 @@ use
 
 /// # Summary
 ///
+/// The YouTube API has a limit on how many search results it will return. This number is that
+/// limit.
+const API_MAX_RESULTS: u64 = 500;
+
+/// # Summary
+///
 /// An error message to use when expecting valid JSON.
 const VALID_JSON: &str = "Expected valid JSON";
 
@@ -24,8 +30,11 @@ fn api_key() -> String
 /// Return the YouTube channel id of `username`.
 pub async fn channel_id_of(username: &str) -> Result<Option<String>>
 {
-	let text = reqwest::get(format!("https://www.googleapis.com/youtube/v3/channels?forUsername={}&key={}&part=id", username, api_key()))
-		.await?
+	let text = reqwest::get(format!(
+		"https://www.googleapis.com/youtube/v3/channels?forUsername={}&key={}&part=id",
+		username,
+		api_key(),
+	)).await?
 		.text()
 		.await?
 	;
@@ -50,11 +59,11 @@ pub async fn channel_id_of(username: &str) -> Result<Option<String>>
 /// # Summary
 ///
 /// Get all videos posted by the `channel_id`.
-pub async fn random_video_by(channel_id: &str) -> Result<Option<String>>
+pub async fn random_video_by(channel_id: &str) -> Result<String>
 {
+	let mut current_video = 0;
 	let mut page_token = String::new();
 	let mut video_number = Option::<u64>::None;
-	let mut current_video = 0;
 
 	loop
 	{
@@ -63,7 +72,10 @@ pub async fn random_video_by(channel_id: &str) -> Result<Option<String>>
 			channel_id,
 			api_key(),
 			page_token,
-		)).await?.text().await?;
+		)).await?
+			.text()
+			.await?
+		;
 
 		let json = serde_json::from_str::<Value>(&text).expect(VALID_JSON);
 
@@ -74,7 +86,7 @@ pub async fn random_video_by(channel_id: &str) -> Result<Option<String>>
 				if let Some(Value::Number(total_results)) = page_info.get("totalResults")
 				{
 					video_number = Some(rand::thread_rng().gen_range(
-						0..total_results.as_u64().expect("Expected to be able to store `totalResults` in a u64")
+						0..API_MAX_RESULTS.min(total_results.as_u64().expect("Expected to be able to store `totalResults` in a u64"))
 					));
 				}
 			}
@@ -108,7 +120,7 @@ pub async fn random_video_by(channel_id: &str) -> Result<Option<String>>
 					}
 				)
 			{
-				return Ok(Some(video.into()));
+				return Ok(video.into());
 			}
 		}
 
@@ -120,9 +132,5 @@ pub async fn random_video_by(channel_id: &str) -> Result<Option<String>>
 				continue;
 			}
 		}
-
-		break;
 	}
-
-	Ok(None)
 }
