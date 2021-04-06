@@ -1,9 +1,9 @@
-mod youtube_api;
+mod youtube;
 
 #[tokio::main]
 async fn main()
 {
-	let channel_id = youtube_api::channel_id_of("PragerUniversity").await.unwrap();
-	let videos = youtube_api::random_video_by(&channel_id.unwrap()).await.unwrap();
-	println!("{:?}", videos.unwrap().len());
+	let channel_id = youtube::channel_id_of("PragerUniversity").await.expect("Expected a valid username or quota to be avilalable");
+	let video = youtube::random_video_by(&channel_id.unwrap()).await.unwrap();
+	println!("{:?}", video);
 }
