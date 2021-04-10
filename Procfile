@@ -1,1 +1,1 @@
-web: ./target/release/wisdom-bot
+worker: ./target/release/wisdom-bot
