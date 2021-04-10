@@ -1,11 +1,23 @@
 #[allow(clippy::suspicious_else_formatting)]
 
+mod discord;
 mod youtube;
 
-#[tokio::main]
-async fn main()
+use
 {
-	let channel_id = youtube::channel_id_of("PragerUniversity").await.expect("Expected a valid username or quota to be avilalable");
-	let video = youtube::random_video_by(&channel_id.unwrap()).await.unwrap();
-	println!("{:?}", video);
+	std::env,
+
+	discord::WisdomBot,
+
+	serenity::{Client, Result},
+};
+
+#[tokio::main]
+async fn main() -> Result<()>
+{
+	let token = env::var("DISCORD_TOKEN").expect("You must set your token to `$DISCORD_TOKEN`");
+
+	Client::builder(&token).event_handler(WisdomBot).await?.start().await?;
+
+	Ok(())
 }
