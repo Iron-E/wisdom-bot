@@ -28,10 +28,12 @@ impl WisdomBot
 	/// # Summary
 	///
 	/// The command which activates [`WisdomBot`].
-	const fn command() -> &'static str
-	{
-		"!wisdom"
-	}
+	const fn command() -> &'static str { "!wisdom" }
+
+	/// # Summary
+	///
+	/// The discriminator of this bot.
+	const fn discriminator() -> u16 { 3703 }
 
 	/// # Summary
 	///
@@ -40,6 +42,11 @@ impl WisdomBot
 	{
 		message.content == Self::command()
 	}
+
+	/// # Summary
+	///
+	/// The username of this bot.
+	const fn username() -> &'static str { "Weiß the Wise" }
 }
 
 #[async_trait]
@@ -61,7 +68,12 @@ impl EventHandler for WisdomBot
 			}
 		}
 
-		if Self::requires_help(&received)
+		if (received.author.bot && received.author.name == Self::username() && received.author.discriminator == Self::discriminator()) ||
+			!received.content.split(' ').next().unwrap_or("").contains(Self::command())
+		{
+			return;
+		}
+		else if Self::requires_help(&received)
 		{
 			say_and_return!(Args::usage())
 		}
