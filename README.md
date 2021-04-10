@@ -18,18 +18,14 @@
 This bot works through the `!wisdom` command:
 
 ```ungram
-'!wisdom ' Username ('/' CustomUrl)? PlayCommand?
+'!wisdom ' Username PlayCommand?
 ```
 
-* `Username` corresponds to the user name of a [YouTube][youtube]r (e.g. [Markiplier][markiplier])
-* `CustomUrl` corresponds to the custom URL of a [YouTube][youtube]r (e.g. "markiplierGAME" for [Markiplier][markiplier])
+* `Username` corresponds to the user name of a [YouTube][youtube]r (e.g. `markiplierGAME` for [Markiplier][markiplier])
 * `PlayCommand` is the name of the command which plays a video as audio (defaults to `play`).
+	> NOTE: unfortunately, Discord bots do not accept commands from other bots. You will have to repaste the output command yourself.
 
-The following command will play a random [Markiplier][markiplier] video using [Rhythm][rhythm]:
-
-```
-!wisdom Markiplier
-```
+Run `!wisdom` for examples.
 
 [discord]: https://discord.com/
 [markiplier]: https://www.youtube.com/user/markiplierGAME
