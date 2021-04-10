@@ -6,7 +6,7 @@
 
 ## Installation
 
-__TODO__
+1. [Click this link](https://discord.com/api/oauth2/authorize?client_id=830536265823682591&permissions=67584&scope=bot)
 
 ### Prerequisites
 
