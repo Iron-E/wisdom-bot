@@ -1,3 +1,5 @@
+#[allow(clippy::suspicious_else_formatting)]
+
 mod youtube;
 
 #[tokio::main]
