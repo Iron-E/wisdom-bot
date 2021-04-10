@@ -17,12 +17,13 @@
 
 This bot works through the `!wisdom` command:
 
-```
-!wisdom <username> [<command>]
+```ungram
+'!wisdom ' Username ('/' CustomUrl)? PlayCommand?
 ```
 
-* `<username>` corresponds to the user name of a [YouTube][youtube]r (e.g. [Markiplier][markiplier])
-* `<command>` is the name of the command which plays a video as audio (defaults to `play`).
+* `Username` corresponds to the user name of a [YouTube][youtube]r (e.g. [Markiplier][markiplier])
+* `CustomUrl` corresponds to the custom URL of a [YouTube][youtube]r (e.g. "markiplierGAME" for [Markiplier][markiplier])
+* `PlayCommand` is the name of the command which plays a video as audio (defaults to `play`).
 
 The following command will play a random [Markiplier][markiplier] video using [Rhythm][rhythm]:
 
