@@ -86,7 +86,7 @@ pub async fn random_video_by(channel_id: &str) -> Result<String>
 				if let Some(Value::Number(total_results)) = page_info.get("totalResults")
 				{
 					video_number = Some(rand::thread_rng().gen_range(
-						0..API_MAX_RESULTS.min(total_results.as_u64().expect("Expected to be able to store `totalResults` in a u64"))
+						0..API_MAX_RESULTS.min(total_results.as_u64().unwrap_or(u64::MAX))
 					));
 				}
 			}
@@ -94,8 +94,9 @@ pub async fn random_video_by(channel_id: &str) -> Result<String>
 
 		if let Some(Value::Array(items)) = json.get("items")
 		{
-			if let Some(video) = items.into_iter()
-				.filter_map(|search_result| {
+			if let Some(video_id) = items.iter()
+				.filter_map(|search_result|
+				{
 					if let Value::Object(s) = search_result
 					{
 						if let Some(Value::Object(video)) = s.get("id")
@@ -120,7 +121,7 @@ pub async fn random_video_by(channel_id: &str) -> Result<String>
 					}
 				)
 			{
-				return Ok(video.into());
+				return Ok(video_id.clone());
 			}
 		}
 
