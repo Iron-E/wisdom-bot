@@ -1,4 +1,1 @@
-[toolchain]
-channel = "nightly-2021-03-24"
-
-# vim: ft=toml
+nightly-2021-03-24
