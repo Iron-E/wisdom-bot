@@ -1,8 +1,9 @@
 use
 {
 	std::env,
+
+	anyhow::{bail, Result},
 	rand::Rng,
-	reqwest::Result,
 	serde_json::Value,
 };
 
@@ -39,7 +40,7 @@ pub async fn channel_id_of(username: &str) -> Result<Option<String>>
 		.await?
 	;
 
-	let mut channel_id = Option::<String>::None;
+	let mut channel_id = None;
 
 	let json = serde_json::from_str::<Value>(&text).expect(VALID_JSON);
 	if let Some(Value::Array(items)) = json.get("items")
@@ -51,6 +52,11 @@ pub async fn channel_id_of(username: &str) -> Result<Option<String>>
 				channel_id = Some(id.clone());
 			}
 		}
+	}
+
+	if let Some(Value::Object(_)) = json.get("error")
+	{
+		bail!("No quota left");
 	}
 
 	Ok(channel_id)
@@ -78,6 +84,11 @@ pub async fn random_video_by(channel_id: &str) -> Result<String>
 		;
 
 		let json = serde_json::from_str::<Value>(&text).expect(VALID_JSON);
+
+		if let Some(Value::Object(_)) = json.get("error")
+		{
+			bail!("No quota left");
+		}
 
 		if video_number.is_none()
 		{
